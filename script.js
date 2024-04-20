@@ -3,13 +3,22 @@ document.addEventListener("DOMContentLoaded", function () {
   const listButton = document.querySelector(".list");
   const listsDropdown = document.querySelector(".lists-dropdown");
 
+  let lists = JSON.parse(localStorage.getItem("lists")) || [];
+
   function createToDoList(name) {
     const newListContainer = document.createElement("div");
     newListContainer.classList.add("todo-list-container");
 
-    const newListText = document.createElement("h2");
+    /* const newListText = document.createElement("h2");
     newListText.classList.add("todo-list-text");
-    newListText.textContent = name;
+    newListText.textContent = name; */
+
+    const newListText = document.createElement("input");
+    newListText.classList.add("todo-list-text");
+    newListText.type = "text";
+    newListText.value = name;
+    newListText.setAttribute("value", name);
+    newListText.setAttribute("readonly", "readonly");
 
     const taskInput = document.createElement("div");
     taskInput.classList.add("task-input");
@@ -128,13 +137,10 @@ document.addEventListener("DOMContentLoaded", function () {
       if (e.target.classList.contains("status")) {
         const statusBtn = e.target;
         const currentTask = e.target.closest(".task");
-        const currentContent = currentTask.querySelector(".task-content");
         currentTask.classList.toggle("done");
         if (statusBtn.innerHTML == "Done") {
-          currentContent.style.color = "var(--dark)";
           statusBtn.innerHTML = "Undo";
         } else {
-          currentContent.style.color = "var(--light)";
           statusBtn.innerHTML = "Done";
         }
         // Reorder tasks based on the presence of the "done" class
@@ -192,10 +198,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function saveLists() {
+    localStorage.setItem("lists", JSON.stringify(lists));
+  }
+
   const addListButton = document.querySelector(".addList");
 
   function defaultAddListBtn() {
     // set default properites of addList button after task created
+    addListButton.style.position = "fixed";
     addListButton.style.removeProperty("top");
     addListButton.style.removeProperty("left");
     addListButton.style.right = "5px";
@@ -227,15 +238,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   addListButton.addEventListener("click", addNewList);
 
-  let lists = JSON.parse(localStorage.getItem("lists")) || [];
-
   if (lists.length == 0) {
     // Perform task here:
     var createNewList = document.createElement("div");
     createNewList.className = "todo-list-container";
     createNewList.innerHTML =
-      "Your list is empty, please create a new one by clicking the button below";
+      "You have no list to display, please create a new one by clicking the button below";
     container.appendChild(createNewList);
+    addListButton.style.position = "absolute";
     addListButton.style.width = "300px";
     addListButton.style.height = "50px";
     addListButton.style.left = "50%";
@@ -246,6 +256,34 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     defaultAddListBtn();
   }
+
+  // Edit name of list
+  window.addEventListener("click", (e) => {
+    if (e.target.matches(".todo-list-text")) {
+      const oldTitle = e.target.value;
+      const taskContainer = document.querySelector(".task-container");
+      e.target.removeAttribute("readonly");
+      e.target.focus();
+      const savedNewTitle = () => {
+        e.target.setAttribute("value", e.target.value);
+        e.target.setAttribute("readonly", "readonly");
+        for (var i = 0; i < lists.length; i++) {
+          if (lists[i] == oldTitle) lists[i] = e.target.value;
+        }
+        saveTasks(e.target.value, taskContainer);
+        removeTasks(oldTitle);
+        saveLists();
+      };
+      e.target.addEventListener("keyup", (ev) => {
+        if (ev.key == "Enter") {
+          if (e.target.value != "") savedNewTitle();
+        }
+      });
+      document.addEventListener("click", (ev) => {
+        if (ev.target != e.target && e.target.value != "") savedNewTitle();
+      });
+    }
+  });
   // Load tasks for each list when the page loads
   lists.forEach((list) => {
     const taskContainer = document.createElement("div");

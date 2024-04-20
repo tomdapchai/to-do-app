@@ -14,10 +14,31 @@
   font-family: "Fira sans", sans-serif;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 body {
   margin: 0;
   background-color: var(--dark);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 input {
@@ -26,14 +47,28 @@ input {
   background: none;
 }
 
-.container {
-  position: relative;
+.header {
+  width: 100vw;
   display: flex;
-  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.header .title {
+  color: var(--purple);
+  font-size: 3rem;
+  user-select: none;
+}
+
+.container {
+  margin-top: 100px;
+  display: flex;
+  height: 100%;
   width: 100vw;
   justify-content: center;
   align-items: center;
 }
+
 .to-do-container {
   width: 60vw;
   height: 70vh;
@@ -59,10 +94,18 @@ input {
 }
 
 .todo-list-text {
-  font-size: 2.5rem;
+  font-size: 4rem;
   font-weight: 300;
   color: var(--grey);
-  margin-bottom: 50px;
+  margin-bottom: 40px;
+  width: 100%;
+  border-bottom: 5px solid var(--grey);
+  transition: 0.2s ease;
+}
+
+.todo-list-text:not(:read-only) {
+  color: var(--light);
+  border-bottom: 5px solid var(--light);
 }
 
 .todo-list-container .task-input {
@@ -95,7 +138,6 @@ input {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   cursor: pointer;
-  transition: 0.4s;
 }
 
 .todo-list-container .task-input button:hover {
@@ -106,8 +148,7 @@ input {
 }
 
 .todo-list-container .task-container {
-  margin-top: 10px;
-  margin-bottom: 20px;
+  margin-top: 30px;
   width: 100%;
   min-width: 50%;
   display: flex;
@@ -124,7 +165,6 @@ input {
   padding: 1rem;
   border-radius: 1rem;
   margin-bottom: 1rem;
-  transition: 0.3s ease;
   box-shadow: 255 255 255 0.5px;
 }
 
@@ -139,11 +179,15 @@ input {
   font-size: 1.125rem;
   width: 100%;
   display: block;
-  transition: 0.4s;
+  transition: 0.2s ease;
+}
+
+.task .task-content:not(:read-only) {
+  color: var(--pink);
 }
 
 .done {
-  opacity: 0.25;
+  opacity: 0.7;
 }
 
 .todo-list-container .task-container .task .action-container button {
@@ -155,7 +199,14 @@ input {
   font-size: 1.125rem;
   font-weight: 700;
   text-transform: uppercase;
-  transition: 0.4s;
+}
+
+.todo-list-container .task-container .task .action-container button:hover {
+  opacity: 0.8;
+}
+
+.todo-list-container .task-container .task .action-container button:action {
+  opacity: 0.7;
 }
 
 .todo-list-container .task-container .task .action-container .edit-task {
@@ -172,7 +223,7 @@ input {
   right: 5px;
   top: 5px;
   padding: 10px 20px;
-  background-image: linear-gradient(to right, var(--pink), var(--purple));
+  background-image: linear-gradient(to left, var(--pink), var(--purple));
   color: var(--light);
   border: none;
   border-radius: 5px;
@@ -215,11 +266,18 @@ input {
   font-size: 1rem;
   font-weight: 600;
   text-transform: uppercase;
-  transition: 0.4s;
   color: crimson;
 }
 
 .addList {
-  position: absolute;
   cursor: pointer;
+  background-color: var(--light);
+}
+
+.addList:hover {
+  opacity: 0.8;
+}
+
+.addList:active {
+  opacity: 0.7;
 }
