@@ -1,9 +1,33 @@
+:root {
+  --dark: #374151;
+  --darker: #1f2937;
+  --darkest: #111827;
+  --grey: #929499;
+  --pink: #ec4899;
+  --purple: #8b5cf6;
+  --light: #eee;
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Fira sans", sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  background-color: var(--dark);
+  overflow: hidden;
+}
+
+input {
+  border: none;
+  outline: none;
+  background: none;
 }
 
 .container {
+  position: relative;
   display: flex;
   height: 100vh;
   width: 100vw;
@@ -17,8 +41,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  border: 2px solid #ccc;
+  justify-content: flex-start;
   border-radius: 5px;
   padding: 20px;
 }
@@ -27,17 +50,65 @@ body {
   width: 100%;
   min-height: auto;
   height: fit-content;
-  background-color: white;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  font-size: 1.5rem;
+  color: var(--light);
+}
+
+.todo-list-text {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: var(--grey);
+  margin-bottom: 50px;
+}
+
+.todo-list-container .task-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.todo-list-container .task-input input {
+  width: 70%;
+  flex: 1 1 0%;
+  background-color: var(--darker);
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-right: 1rem;
+  color: var(--light);
+  font-size: 1.25rem;
+}
+
+.todo-list-container .task-input button {
+  border: none;
+  outline: none;
+  background: none;
+  color: var(--pink);
+  font-size: 1.25rem;
+  font-weight: 700;
+  background-image: linear-gradient(to right, var(--pink), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.todo-list-container .task-input button:hover {
+  opacity: 0.8;
+}
+.todo-list-container .task-input button:active {
+  opacity: 0.7;
 }
 
 .todo-list-container .task-container {
   margin-top: 10px;
   margin-bottom: 20px;
-  width: auto;
+  width: 100%;
   min-width: 50%;
   display: flex;
   flex-direction: column;
@@ -46,37 +117,67 @@ body {
 }
 
 .todo-list-container .task-container .task {
-  width: 80%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--darkest);
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  transition: 0.3s ease;
+  box-shadow: 255 255 255 0.5px;
+}
+
+.todo-list-container .task-container .task .action-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  width: auto;
 }
 
-.todo-list-container .task-container .task .action-container .status {
-  background-color: rgb(144, 144, 232);
+.task .task-content {
+  color: var(--light);
+  font-size: 1.125rem;
+  width: 100%;
+  display: block;
+  transition: 0.4s;
 }
 
-.todo-list-container .task-container .task .action-container .remove {
-  background-color: crimson;
+.done {
+  opacity: 0.25;
 }
 
 .todo-list-container .task-container .task .action-container button {
+  border: none;
+  outline: none;
+  background: none;
   cursor: pointer;
-  width: 40px;
-  height: 40px;
+  margin: 0 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: 0.4s;
 }
 
+.todo-list-container .task-container .task .action-container .edit-task {
+  background-image: linear-gradient(to right, var(--pink), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.todo-list-container .task-container .task .action-container .remove {
+  color: crimson;
+}
 .list {
   position: fixed;
   right: 5px;
   top: 5px;
   padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
+  background-image: linear-gradient(to right, var(--pink), var(--purple));
+  color: var(--light);
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  user-select: none;
 }
 
 .lists-dropdown {
@@ -84,23 +185,41 @@ body {
   position: fixed;
   right: 5px;
   top: 45px; /* Adjust this value to your preference */
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 5px 10px 10px 10px;
+  background-color: var(--darker);
+  color: var(--light);
+  border-radius: 10px;
   z-index: 1;
 }
 
 .lists-dropdown .list-element {
-  padding: 5px 0;
+  padding: 5px 2px 5px 7px;
   cursor: pointer;
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
+  background-color: var(--darkest);
+  border-radius: 5px;
+  margin-top: 5px;
+  width: 300px;
+  height: 40px;
+}
+
+.lists-dropdown .list-element button {
+  border: none;
+  outline: none;
+  background: none;
+  cursor: pointer;
+  margin: 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  transition: 0.4s;
+  color: crimson;
 }
 
 .addList {
-  position: fixed;
-  left: 5px;
-  top: 5px;
+  position: absolute;
+  cursor: pointer;
 }
