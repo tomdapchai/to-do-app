@@ -6,6 +6,7 @@
   --pink: #ec4899;
   --purple: #8b5cf6;
   --light: #eee;
+  --yellow: rgb(235, 239, 14);
 }
 
 * {
@@ -59,10 +60,13 @@ input {
 .header .title {
   font-family: "Pacifico", cursive;
   font-style: italic;
-  color: var(--purple);
+  background: linear-gradient(to right, var(--purple) 0%, var(--pink) 100%);
+  background-clip: text;
+  color: transparent;
   font-size: 5rem;
   font-weight: 300;
   user-select: none;
+  width: 500px;
 }
 
 .container {
@@ -75,7 +79,8 @@ input {
 }
 
 .to-do-container {
-  width: 60vw;
+  min-width: 60vw;
+  width: fit-content;
   height: 70vh;
   margin: auto;
   display: flex;
@@ -175,16 +180,19 @@ input {
   display: flex;
   justify-content: space-between;
   background-color: var(--darkest);
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 1rem;
   margin-bottom: 1rem;
   box-shadow: 255 255 255 0.5px;
+  position: relative;
 }
 
 .todo-list-container .task-container .task .action-container {
   display: flex;
   flex-direction: row;
   width: auto;
+  justify-content: center;
+  align-items: center;
 }
 
 .task .task-content {
@@ -203,23 +211,53 @@ input {
   opacity: 0.7;
 }
 
-.todo-list-container .task-container .task .action-container button {
+.done .task-content {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+button {
+  cursor: pointer;
+}
+
+.todo-list-container .task-container .task .action-container .remove {
   border: none;
   outline: none;
   background: none;
-  cursor: pointer;
   margin: 0 0.5rem;
-  font-size: 1.125rem;
+  font-size: 30px;
   font-weight: 700;
   text-transform: uppercase;
 }
 
-.todo-list-container .task-container .task .action-container button:hover {
+.todo-list-container .task-container .task .action-container .status {
+  background-color: var(--light);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 0;
+}
+
+.todo-list-container .task-container .task .action-container .button:hover {
   opacity: 0.8;
 }
 
-.todo-list-container .task-container .task .action-container button:action {
+.todo-list-container .task-container .task .action-container .button:action {
   opacity: 0.7;
+}
+
+.priority {
+  position: absolute;
+  left: -40px;
+  border-radius: 50%;
+  background: none;
+  color: rgb(238, 238, 238);
+  border: none;
+  font-size: 30px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .todo-list-container .task-container .task .action-container .edit-task {
@@ -283,7 +321,6 @@ input {
   border: none;
   outline: none;
   background: none;
-  cursor: pointer;
   margin: 0 0.5rem;
   font-size: 1rem;
   font-weight: 600;
@@ -293,7 +330,11 @@ input {
 
 .addList {
   cursor: pointer;
-  background-color: var(--light);
+  border-radius: 5px;
+  color: var(--light);
+  background-color: var(--darker);
+  border: 2px solid;
+  border-image: linear-gradient(90deg, var(--purple), var(--pink)) 1;
 }
 
 .addList:hover {

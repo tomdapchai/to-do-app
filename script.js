@@ -51,13 +51,28 @@ document.addEventListener("DOMContentLoaded", function () {
     function sortTask() {
       const tasks = Array.from(taskContainer.querySelectorAll(".task"));
       tasks.sort((a, b) => {
+        const aIsStarred = a.classList.contains("starred");
+        const bIsStarred = b.classList.contains("starred");
         const aIsDone = a.classList.contains("done");
         const bIsDone = b.classList.contains("done");
+
+        // Check if a task is starred
+        if (aIsStarred && !bIsStarred) {
+          if (aIsDone && !bIsDone) return 1;
+          else return -1; // Move a to the top
+        } else if (!aIsStarred && bIsStarred) {
+          if (bIsDone && !aIsDone) return -1;
+          else return 1; // Move b to the top
+        }
+
+        // If both tasks are starred or both are not starred,
+        // check if they are done
         if (aIsDone && !bIsDone) {
           return 1; // Move a to the bottom
         } else if (!aIsDone && bIsDone) {
           return -1; // Move b to the bottom
         }
+
         return 0; // Preserve order for other cases
       });
 
@@ -74,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
         content.className = "task-content";
         content.type = "text";
         content.value = input.value.trim();
-        content.setAttribute("value", `${content.value}`);
+        content.setAttribute("value", content.value);
         content.setAttribute("readonly", "readonly");
 
         const actionContainer = document.createElement("div");
@@ -82,19 +97,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const doneBtn = document.createElement("button");
         doneBtn.className = "status";
-        doneBtn.innerHTML = "Done";
-
-        const editBtn = document.createElement("button");
-        editBtn.className = "edit-task";
-        editBtn.innerHTML = "Edit";
 
         const removeBtn = document.createElement("button");
         removeBtn.className = "remove";
-        removeBtn.innerHTML = "Remove";
+        removeBtn.innerHTML = "&times";
+
+        const starBtn = document.createElement("button");
+        starBtn.className = "priority";
+        starBtn.innerHTML = "&#x2605;";
 
         actionContainer.appendChild(doneBtn);
         actionContainer.appendChild(removeBtn);
-        actionContainer.appendChild(editBtn);
+        actionContainer.appendChild(starBtn);
 
         task.appendChild(content);
         task.appendChild(actionContainer);
@@ -138,10 +152,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const statusBtn = e.target;
         const currentTask = e.target.closest(".task");
         currentTask.classList.toggle("done");
-        if (statusBtn.innerHTML == "Done") {
-          statusBtn.innerHTML = "Undo";
+        if (currentTask.classList.contains("done")) {
+          statusBtn.style.border = "3px solid rgb(238, 238, 238)";
+          statusBtn.style.backgroundColor = "#1f2937";
         } else {
-          statusBtn.innerHTML = "Done";
+          statusBtn.style.border = "0";
+          statusBtn.style.backgroundColor = "rgb(238, 238, 238)";
         }
         // Reorder tasks based on the presence of the "done" class
         sortTask();
@@ -150,27 +166,39 @@ document.addEventListener("DOMContentLoaded", function () {
         e.target.parentNode.parentNode.remove();
         // Remove task from local storage
         saveTasks(name, taskContainer);
-      } else if (e.target.classList.contains("edit-task")) {
-        const editBtn = e.target;
-        const content =
-          e.target.parentElement.parentElement.querySelector(".task-content");
-        if (editBtn.innerHTML == "Edit") {
-          editBtn.innerHTML = "Save";
-          content.removeAttribute("readonly");
-          content.focus();
-          content.addEventListener("keyup", (e) => {
-            if (e.key == "Enter") {
-              content.setAttribute("value", content.value);
-              content.setAttribute("readonly", "readonly");
-              editBtn.innerHTML = "Edit";
-            }
-            saveTasks(name, taskContainer);
-          });
-        } else if (editBtn.innerHTML == "Save") {
-          editBtn.innerHTML = "Edit";
+      } else if (e.target.classList.contains("task-content")) {
+        const content = e.target;
+        content.removeAttribute("readonly");
+        content.focus();
+        const changeTaskContent = () => {
           content.setAttribute("value", content.value);
           content.setAttribute("readonly", "readonly");
+        };
+        content.addEventListener("keyup", (e) => {
+          if (e.key == "Enter") {
+            changeTaskContent();
+          }
+          saveTasks(name, taskContainer);
+        });
+
+        document.addEventListener("click", (ev) => {
+          if (ev.target != e.target) {
+            changeTaskContent();
+          }
+          saveTasks(name, taskContainer);
+        });
+
+        saveTasks(name, taskContainer);
+      } else if (e.target.classList.contains("priority")) {
+        const starBtn = e.target;
+        const currentTask = starBtn.closest(".task");
+        currentTask.classList.toggle("starred");
+        if (currentTask.classList.contains("starred")) {
+          starBtn.style.color = "rgb(235, 239, 14)";
+        } else {
+          starBtn.style.color = "rgb(238, 238, 238)";
         }
+        sortTask();
         saveTasks(name, taskContainer);
       }
     });
@@ -253,16 +281,18 @@ document.addEventListener("DOMContentLoaded", function () {
     var createNewList = document.createElement("div");
     createNewList.className = "todo-list-container";
     createNewList.innerHTML =
-      "You have no list to display, please create a new one by clicking the button below";
+      "You have no list to display, please create a new one by clicking the button below:";
     createNewList.style.userSelect = "none";
+    createNewList.style.fontSize = "2rem";
     container.appendChild(createNewList);
     addListButton.style.position = "absolute";
     addListButton.style.width = "300px";
-    addListButton.style.height = "50px";
+    addListButton.style.height = "100px";
     addListButton.style.left = "50%";
     addListButton.style.top = "40%";
-    addListButton.style.fontSize = "1rem";
+    addListButton.style.fontSize = "1.5rem";
     addListButton.style.transform = "translate(-50%, -60%)";
+
     listButton.style.visibility = "hidden";
   } else {
     defaultAddListBtn();
