@@ -79,16 +79,19 @@ input {
 }
 
 .to-do-container {
-  min-width: 60vw;
+  min-width: 65vw;
   width: fit-content;
-  height: 70vh;
+  min-height: 70vh;
   margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  border-radius: 5px;
-  padding: 20px;
+  border-radius: 20px;
+  padding: 60px 60px 30px 60px;
+  border: 10px solid var(--darker);
+  background-color: var(--darkest);
+  position: relative;
 }
 
 .todo-list-container {
@@ -109,7 +112,7 @@ input {
   color: var(--grey);
   margin-bottom: 40px;
   width: 100%;
-  border-bottom: 5px solid var(--grey);
+  border-bottom: 4px solid var(--grey);
   transition: 0.2s ease;
 }
 
@@ -131,7 +134,7 @@ input {
   flex: 1 1 0%;
   background-color: var(--darker);
   padding: 1rem;
-  border-radius: 1rem;
+  border-radius: 10px;
   margin-right: 1rem;
   color: var(--light);
   font-size: 1.25rem;
@@ -179,11 +182,11 @@ input {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  background-color: var(--darkest);
+  background-color: #797b7ec7;
   padding: 0.5rem 1rem;
-  border-radius: 1rem;
+  border: 2px solid var(--grey);
+  border-radius: 10px;
   margin-bottom: 1rem;
-  box-shadow: 255 255 255 0.5px;
   position: relative;
 }
 
@@ -204,7 +207,7 @@ input {
 }
 
 .task .task-content:not(:read-only) {
-  color: var(--pink);
+  color: var(--darker);
 }
 
 .done {

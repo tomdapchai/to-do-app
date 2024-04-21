@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
           return -1; // Move b to the bottom
         }
 
-        return 0; // Preserve order for other cases
+        return 0;
       });
 
       // Append the sorted tasks back to the container
@@ -289,9 +289,9 @@ document.addEventListener("DOMContentLoaded", function () {
     addListButton.style.width = "300px";
     addListButton.style.height = "100px";
     addListButton.style.left = "50%";
-    addListButton.style.top = "40%";
+    addListButton.style.top = "56%";
     addListButton.style.fontSize = "1.5rem";
-    addListButton.style.transform = "translate(-50%, -60%)";
+    addListButton.style.transform = "translate(-50%, -50%)";
 
     listButton.style.visibility = "hidden";
   } else {
@@ -317,7 +317,8 @@ document.addEventListener("DOMContentLoaded", function () {
       };
       e.target.addEventListener("keyup", (ev) => {
         if (ev.key == "Enter") {
-          if (e.target.value != "") savedNewTitle();
+          if (e.target.value != "" && !lists.includes(e.target.value))
+            savedNewTitle();
         }
       });
       document.addEventListener("click", (ev) => {
