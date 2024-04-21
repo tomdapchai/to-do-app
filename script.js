@@ -220,20 +220,30 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function addNewList() {
-    const newListName = prompt("Enter the name for your new list:");
-    if (newListName) {
-      // Add the new list to the lists array
-      lists.push(newListName);
-      // Create the new to-do list with the provided name
-      const taskContainer = document.createElement("div");
-      createToDoList(newListName);
-      // Save the updated lists array to local storage
-      localStorage.setItem("lists", JSON.stringify(lists));
-
-      defaultAddListBtn();
-      const input = document.querySelector("input");
-      input.focus();
+    var newListName;
+    while (true) {
+      newListName = prompt(
+        "Enter new list name, cannot be the same with existing lists:"
+      );
+      if (newListName === null) {
+        // User clicked cancel, exit the function
+        return;
+      }
+      if (newListName && !lists.includes(newListName)) {
+        break; // Valid input, exit the loop
+      }
     }
+    lists.push(newListName);
+    // Create the new to-do list with the provided name
+    const taskContainer = document.createElement("div");
+    createToDoList(newListName);
+    // Save the updated lists array to local storage
+    localStorage.setItem("lists", JSON.stringify(lists));
+
+    defaultAddListBtn();
+    const input = document.querySelector("input");
+    input.focus();
+    // Add the new list to the lists array
   }
 
   addListButton.addEventListener("click", addNewList);
@@ -244,12 +254,13 @@ document.addEventListener("DOMContentLoaded", function () {
     createNewList.className = "todo-list-container";
     createNewList.innerHTML =
       "You have no list to display, please create a new one by clicking the button below";
+    createNewList.style.userSelect = "none";
     container.appendChild(createNewList);
     addListButton.style.position = "absolute";
     addListButton.style.width = "300px";
     addListButton.style.height = "50px";
     addListButton.style.left = "50%";
-    addListButton.style.top = "30%";
+    addListButton.style.top = "40%";
     addListButton.style.fontSize = "1rem";
     addListButton.style.transform = "translate(-50%, -60%)";
     listButton.style.visibility = "hidden";
@@ -306,6 +317,7 @@ document.addEventListener("DOMContentLoaded", function () {
       location.reload();
     }
   }
+
   // Function to display the lists dropdown
   function showListsDropdown() {
     listsDropdown.innerHTML = ""; // Clear existing content
@@ -339,9 +351,11 @@ document.addEventListener("DOMContentLoaded", function () {
       listsDropdown.style.display === "none" ||
       listsDropdown.style.display === ""
     ) {
-      showListsDropdown();
+      listButton.style.width = "320px";
+      setTimeout(() => showListsDropdown(), 200);
     } else {
-      hideListsDropdown();
+      setTimeout(() => hideListsDropdown(), 200);
+      listButton.style.width = "200px";
     }
   });
 
@@ -349,6 +363,7 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("click", function (event) {
     if (!event.target.matches(".list")) {
       hideListsDropdown();
+      listButton.style.width = "200px";
     }
   });
 });

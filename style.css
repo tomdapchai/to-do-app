@@ -50,18 +50,23 @@ input {
 .header {
   width: 100vw;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  padding-left: 30px;
+  background-image: linear-gradient(to top, var(--dark), var(--darker));
 }
 
 .header .title {
+  font-family: "Pacifico", cursive;
+  font-style: italic;
   color: var(--purple);
-  font-size: 3rem;
+  font-size: 5rem;
+  font-weight: 300;
   user-select: none;
 }
 
 .container {
-  margin-top: 100px;
+  margin-top: 60px;
   display: flex;
   height: 100%;
   width: 100vw;
@@ -94,7 +99,7 @@ input {
 }
 
 .todo-list-text {
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: 300;
   color: var(--grey);
   margin-bottom: 40px;
@@ -134,10 +139,18 @@ input {
   color: var(--pink);
   font-size: 1.25rem;
   font-weight: 700;
-  background-image: linear-gradient(to right, var(--pink), var(--purple));
+
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   cursor: pointer;
+}
+
+.todo-list-container .task-input .list-action .task-adder {
+  background-image: linear-gradient(to right, var(--pink), var(--purple));
+}
+
+.todo-list-container .task-input .list-action .task-removeAll {
+  background-image: linear-gradient(to right, red, crimson);
 }
 
 .todo-list-container .task-input button:hover {
@@ -222,25 +235,34 @@ input {
   position: fixed;
   right: 5px;
   top: 5px;
-  padding: 10px 20px;
-  background-image: linear-gradient(to left, var(--pink), var(--purple));
+  padding: 10px;
+  background-color: var(--dark);
   color: var(--light);
-  border: none;
+  border: 2px solid;
+  border-image: linear-gradient(45deg, var(--purple), var(--pink)) 1;
   border-radius: 5px;
   cursor: pointer;
   user-select: none;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  transition: all 0.4s ease;
 }
 
 .lists-dropdown {
   display: none;
   position: fixed;
   right: 5px;
-  top: 45px; /* Adjust this value to your preference */
+  top: 60px; /* Adjust this value to your preference */
   padding: 5px 10px 10px 10px;
   background-color: var(--darker);
   color: var(--light);
   border-radius: 10px;
   z-index: 1;
+  overflow: hidden;
+  transition: height 0.4s ease;
 }
 
 .lists-dropdown .list-element {
