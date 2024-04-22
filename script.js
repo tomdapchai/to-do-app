@@ -22,7 +22,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const taskInput = document.createElement("div");
     taskInput.classList.add("task-input");
-    taskInput.innerHTML = `
+
+    const inputContainer = document.createElement("div");
+    inputContainer.className = "input-container";
+
+    inputContainer.innerHTML = `
       <input type="text" placeholder="New task">
     `;
 
@@ -33,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <button class="task-removeAll">Remove all</button>
     `;
 
+    taskInput.appendChild(inputContainer);
     taskInput.appendChild(listAction);
     const taskContainer = document.createElement("div");
     taskContainer.classList.add("task-container");

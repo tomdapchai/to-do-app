@@ -1,3 +1,9 @@
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
 :root {
   --dark: #374151;
   --darker: #1f2937;
@@ -6,7 +12,7 @@
   --pink: #ec4899;
   --purple: #8b5cf6;
   --light: #eee;
-  --yellow: rgb(235, 239, 14);
+  --yellow: rgb(234, 237, 39);
 }
 
 * {
@@ -87,11 +93,31 @@ input {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  border-radius: 20px;
+  border-radius: 1rem;
   padding: 60px 60px 30px 60px;
-  border: 10px solid var(--darker);
   background-color: var(--darkest);
   position: relative;
+}
+
+.to-do-container::before,
+.to-do-container::after {
+  content: "";
+  position: absolute;
+  inset: -0.3rem;
+  z-index: -1;
+  background: conic-gradient(
+    from var(--gradient-angle),
+    var(--pink),
+    #da2cbd,
+    var(--purple),
+    var(--pink)
+  );
+  border-radius: inherit;
+  animation: rotation 10s ease infinite;
+}
+
+.to-do-container::after {
+  filter: blur(1rem);
 }
 
 .todo-list-container {
@@ -129,13 +155,42 @@ input {
   width: 100%;
 }
 
+.todo-list-container .task-input .input-container {
+  flex: 1 1 0%;
+  margin-right: 1rem;
+  padding: 0;
+  border-radius: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.todo-list-container .task-input .input-container::before,
+.todo-list-container .task-input .input-container::after {
+  content: "";
+  position: absolute;
+  inset: -0.15rem;
+  z-index: -1;
+  background: conic-gradient(
+    from var(--gradient-angle),
+    var(--pink),
+    #da2cbd,
+    var(--purple),
+    var(--pink)
+  );
+  border-radius: inherit;
+  animation: rotation 20s linear infinite;
+}
+
+.todo-list-container .task-input .input-container::after {
+  filter: blur(0.4rem);
+}
+
 .todo-list-container .task-input input {
-  width: 70%;
+  width: 100%;
   flex: 1 1 0%;
   background-color: var(--darker);
   padding: 1rem;
   border-radius: 10px;
-  margin-right: 1rem;
   color: var(--light);
   font-size: 1.25rem;
 }
@@ -182,9 +237,8 @@ input {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  background-color: #797b7ec7;
+  background-color: var(--dark);
   padding: 0.5rem 1rem;
-  border: 2px solid var(--grey);
   border-radius: 10px;
   margin-bottom: 1rem;
   position: relative;
@@ -207,7 +261,7 @@ input {
 }
 
 .task .task-content:not(:read-only) {
-  color: var(--darker);
+  color: var(--pink);
 }
 
 .done {
@@ -346,4 +400,13 @@ button {
 
 .addList:active {
   opacity: 0.7;
+}
+
+@keyframes rotation {
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
 }
