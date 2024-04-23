@@ -5,13 +5,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let lists = JSON.parse(localStorage.getItem("lists")) || [];
 
+  const testDiv = document.createElement("div");
+  testDiv.className = "testDiv";
+  document.body.appendChild(testDiv);
+
   function createToDoList(name) {
     const newListContainer = document.createElement("div");
     newListContainer.classList.add("todo-list-container");
-
-    /* const newListText = document.createElement("h2");
-    newListText.classList.add("todo-list-text");
-    newListText.textContent = name; */
 
     const newListText = document.createElement("input");
     newListText.classList.add("todo-list-text");
@@ -47,6 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
     newListContainer.appendChild(taskContainer);
 
     container.innerHTML = ""; // Clear existing content
+    defaultAddListBtn();
+
     container.appendChild(newListContainer);
 
     const input = taskInput.querySelector("input");
@@ -242,13 +244,13 @@ document.addEventListener("DOMContentLoaded", function () {
     addListButton.style.position = "fixed";
     addListButton.style.removeProperty("top");
     addListButton.style.removeProperty("left");
-    addListButton.style.right = "5px";
-    addListButton.style.bottom = "5px";
+    addListButton.style.right = "20px";
+    addListButton.style.bottom = "20px";
     addListButton.style.transform = "translate(0, 0)";
-    addListButton.style.width = "50px";
-    addListButton.style.height = "50px";
+    addListButton.style.width = "60px";
+    addListButton.style.height = "60px";
     addListButton.innerHTML = "+";
-    addListButton.style.fontSize = "2rem";
+    addListButton.style.fontSize = "2.5rem";
     listButton.style.visibility = "visible";
   }
 
@@ -282,19 +284,11 @@ document.addEventListener("DOMContentLoaded", function () {
   addListButton.addEventListener("click", addNewList);
 
   if (lists.length == 0) {
-    // Perform task here:
-    var createNewList = document.createElement("div");
-    createNewList.className = "todo-list-container";
-    createNewList.innerHTML =
-      "You have no list to display, please create a new one by clicking the button below:";
-    createNewList.style.userSelect = "none";
-    createNewList.style.fontSize = "2rem";
-    container.appendChild(createNewList);
     addListButton.style.position = "absolute";
     addListButton.style.width = "300px";
     addListButton.style.height = "100px";
     addListButton.style.left = "50%";
-    addListButton.style.top = "56%";
+    addListButton.style.top = "calc(35vh + 200px)";
     addListButton.style.fontSize = "1.5rem";
     addListButton.style.transform = "translate(-50%, -50%)";
 
@@ -306,10 +300,31 @@ document.addEventListener("DOMContentLoaded", function () {
   // Edit name of list
   window.addEventListener("click", (e) => {
     if (e.target.matches(".todo-list-text")) {
+      // find the index of current list in lists array
+      // if the new name == lists[i].name that i != the index => don't allow
+      // else u good
+      var index = 0;
+      for (
+        index;
+        index < lists.length && lists[index] != e.target.value;
+        index++
+      );
+      /* console.log(index);
+      console.log(lists[index]); */
       const oldTitle = e.target.value;
       const taskContainer = document.querySelector(".task-container");
       e.target.removeAttribute("readonly");
       e.target.focus();
+      const validTitle = (title) => {
+        var checkIndex = 0;
+        while (checkIndex < lists.length) {
+          if (lists[checkIndex] == title) {
+            if (checkIndex != index) break;
+          }
+          checkIndex++;
+        }
+        return checkIndex == lists.length;
+      };
       const savedNewTitle = () => {
         e.target.setAttribute("value", e.target.value);
         e.target.setAttribute("readonly", "readonly");
@@ -322,12 +337,17 @@ document.addEventListener("DOMContentLoaded", function () {
       };
       e.target.addEventListener("keyup", (ev) => {
         if (ev.key == "Enter") {
-          if (e.target.value != "" && !lists.includes(e.target.value))
+          if (e.target.value != "" && validTitle(e.target.value))
             savedNewTitle();
         }
       });
       document.addEventListener("click", (ev) => {
-        if (ev.target != e.target && e.target.value != "") savedNewTitle();
+        if (
+          ev.target != e.target &&
+          e.target.value != "" &&
+          validTitle(e.target.value)
+        )
+          savedNewTitle();
       });
     }
   });
