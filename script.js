@@ -258,7 +258,8 @@ document.addEventListener("DOMContentLoaded", function () {
     var newListName;
     while (true) {
       newListName = prompt(
-        "Enter new list name, cannot be the same with existing lists:"
+        "Enter new list name, cannot be the same with existing lists:",
+        "New title"
       );
       if (newListName === null) {
         // User clicked cancel, exit the function
